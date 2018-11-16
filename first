@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+#define pb push_back
+#define inf 10000000
+using namespace std;
+vector<int>edges[100],cost[100];
+struct data{
+    int city,dist;
+    bool operator<(const data & p)const{
+        return dist>p.dist;
+    }
+};
+int dijkstra(int source,int destination)
+{
+    int d[100];
+    for(int i=0;i<100;++i)d[i]=inf;
+    priority_queue<data>q;
+    data u,v;
+    u.city=source;
+    u.dist=0;
+    q.push(u);
+    d[source]=0;
+    while(!q.empty()){
+        u=q.top();
+        q.pop();
+        int ucost=d[u.city];
+        for(int i=0;i<edges[u.city].size();++i){
+            v.city=edges[u.city][i],v.dist=cost[u.city][i]+ucost;
+            if(d[v.city]>v.dist){
+                d[v.city]=v.dist;
+                q.push(v);
+            }
+        }
+    }
+    return d[destination];
+}
+int main()
+{
+    int x,y;
+    cin>>x>>y;
+    cout<<dijkstra(x,y)<<endl;
+    return 0;
+}
