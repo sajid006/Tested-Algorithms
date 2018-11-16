@@ -12,7 +12,11 @@ struct data{
 int dijkstra(int source,int destination)
 {
     int d[100];
-    for(int i=0;i<100;++i)d[i]=inf;
+    bool visited[100];///this array doesn't have anything to do with the cost array.Both the arrays are important
+    for(int i=0;i<100;++i){
+        d[i]=inf;
+        visited[i]=0;
+    }
     priority_queue<data>q;
     data u,v;
     u.city=source;
@@ -22,6 +26,11 @@ int dijkstra(int source,int destination)
     while(!q.empty()){
         u=q.top();
         q.pop();
+        ///The following three lines ensures that we are not  unnecessarily processing a node which was already visited
+        ///those nodes will be visited again without a chance for them to change the solution
+        if(visited[u.city])
+            continue;
+        visited[u.city]=1;
         int ucost=d[u.city];
         for(int i=0;i<edges[u.city].size();++i){
             v.city=edges[u.city][i],v.dist=cost[u.city][i]+ucost;
