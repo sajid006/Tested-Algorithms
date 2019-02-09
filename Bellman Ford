@@ -41,6 +41,7 @@ bool bellmanford(int node,int edgeno,int src)
             if(d[x]+z<d[y])
             {
                 d[y]=d[x]+z;
+                parent[y]=x;
             }
         }
     }
@@ -80,7 +81,7 @@ int main()
         cout<<"No negative cycle found"<<endl;
         cout<<"destination:"<<endl;
         cin>>dest;
-        cout<<d[dest]<<endl;
+        cout<<"distance: " <<d[dest]<<endl;
         printpath(src,dest);
     }
     else cout<<"Negative cycle found"<<endl;
