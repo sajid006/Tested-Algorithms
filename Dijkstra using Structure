@@ -2,20 +2,35 @@
 #define pb push_back
 #define inf 10000000
 using namespace std;
-vector<int>edges[100],cost[100];
+vector<int>edges[10005],cost[10005];
 struct data{
     int city,dist;
     bool operator<(const data & p)const{
         return dist>p.dist;
     }
 };
+int parent[100005];
+void printpath(int source,int dest)
+{
+    int i=dest;
+    vector<int>path;
+    while(parent[i]!=i)
+    {
+        path.pb(i);
+        i=parent[i];
+    }
+    path.pb(i);
+    for(i=path.size()-1;i>=0;i--)cout<<path[i]<<' ';
+}
+
 int dijkstra(int source,int destination)
 {
-    int d[100];
-    bool visited[100];///this array doesn't have anything to do with the cost array.Both the arrays are important
-    for(int i=0;i<100;++i){
+    int d[10005];
+    bool visited[10005];///this array doesn't have anything to do with the cost array.Both the arrays are important
+    for(int i=0;i<10005;++i){
         d[i]=inf;
         visited[i]=0;
+        parent[i]=i;
     }
     priority_queue<data>q;
     data u,v;
@@ -24,18 +39,19 @@ int dijkstra(int source,int destination)
     q.push(u);
     d[source]=0;
     while(!q.empty()){
-        u=q.top();
+        int ex=q.top().city;
         q.pop();
-        ///The following three lines ensures that we are not  unnecessarily processing a node which was already visited
+        ///The following three lines ensures that we are not  unnecessarily processing a node to relax other nodes which was already visited
         ///those nodes will be visited again without a chance for them to change the solution
-        if(visited[u.city])
+        if(visited[ex])
             continue;
-        visited[u.city]=1;
-        int ucost=d[u.city];
-        for(int i=0;i<edges[u.city].size();++i){
-            v.city=edges[u.city][i],v.dist=cost[u.city][i]+ucost;
+        visited[ex]=1;
+        int ucost=d[ex];
+        for(int i=0;i<edges[ex].size();++i){
+            v.city=edges[ex][i],v.dist=cost[ex][i]+ucost;
             if(d[v.city]>v.dist){
                 d[v.city]=v.dist;
+                parent[v.city]=ex;
                 q.push(v);
             }
         }
@@ -59,6 +75,7 @@ int main()
     cout<<"Source & Destination:"<<endl;
     cin>>src>>dest;
     cout<<dijkstra(src,dest)<<endl;
+    printpath(src,dest);
     return 0;
 }
 
