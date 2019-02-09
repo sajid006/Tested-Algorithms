@@ -1,0 +1,87 @@
+#include <bits/stdc++.h>
+#define inf 1000000000
+#define mx 100005
+#define pb push_back
+using namespace std;
+struct edge
+{
+    int first,second,distance;
+};
+vector<struct edge>edges;
+int d[mx],parent[mx];
+void printpath(int source,int dest)
+{
+    int i=dest;
+    vector<int>path;
+    while(parent[i]!=i)
+    {
+        path.pb(i);
+        i=parent[i];
+    }
+    path.pb(i);
+    for(i=path.size()-1;i>=0;i--)cout<<path[i]<<' ';
+}
+
+bool bellmanford(int node,int edgeno,int src)
+{
+    int i,j;
+    for(i=0; i<=node; i++)
+    {
+        d[i]=inf;
+        parent[i]=i;
+    }
+    d[src]=0;
+    for(i=0; i<node-1; i++)
+    {
+        for(j=0; j<edgeno; j++)
+        {
+            int x=edges[j].first;
+            int y=edges[j].second;
+            int z=edges[j].distance;
+            if(d[x]+z<d[y])
+            {
+                d[y]=d[x]+z;
+            }
+        }
+    }
+    for(j=0; j<edgeno; j++)
+    {
+        int x=edges[j].first;
+        int y=edges[j].second;
+        int z=edges[j].distance;
+        if(d[x]+z<d[y])
+        {
+
+            return 0;
+        }
+    }
+    if(j==edgeno)return 1;
+}
+int main()
+{
+    int x,y,z,src,dest,node,ed;
+    cout<<"Number of nodes & edges:"<<endl;
+    cin>>node>>ed;
+    for(int i=0; i<ed; i++)
+    {
+        cout<<"Two nodes & their distance for edge no "<<i+1<<" :"<<endl;
+        cin>>x>>y>>z;
+        struct edge temp= {x,y,z};
+        edges.pb(temp);
+        ///Here the edges are one directional
+
+
+    }
+    cout<<"Source:"<<endl;
+    cin>>src;
+    bool f=bellmanford(node,ed,src);
+    if(f==1)
+    {
+        cout<<"No negative cycle found"<<endl;
+        cout<<"destination:"<<endl;
+        cin>>dest;
+        cout<<d[dest]<<endl;
+        printpath(src,dest);
+    }
+    else cout<<"Negative cycle found"<<endl;
+}
