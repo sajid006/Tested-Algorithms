@@ -1,0 +1,78 @@
+#include <bits/stdc++.h>
+#define pb push_back
+#define inf 10000000
+#define pii pair<int,int>
+using namespace std;
+vector<int>edges[10005],cost[10005];
+int parent[100005];
+void printpath(int source,int dest)
+{
+    int i=dest;
+    vector<int>path;
+    while(parent[i]!=i)
+    {
+        path.pb(i);
+        i=parent[i];
+    }
+    path.pb(i);
+    for(i=path.size()-1;i>=0;i--)cout<<path[i]<<' ';
+}
+
+int dijkstra(int source,int destination)
+{
+    int d[10005];
+    bool visited[10005];///this array doesn't have anything to do with the cost array.Both the arrays are important
+    for(int i=0;i<10005;++i){
+        d[i]=inf;
+        visited[i]=0;
+        parent[i]=i;
+    }
+
+    priority_queue< pii,vector<pii >,greater<pii > >q;
+    pii u,v;
+    u.second=source;
+    u.first=0;
+    q.push(u);
+    d[source]=0;
+    while(!q.empty()){
+        int ex=q.top().second;
+        q.pop();
+        ///The following three lines ensures that we are not  unnecessarily processing a node which was already visited
+        ///those nodes will be visited again without a chance for them to change the solution
+        if(visited[ex])
+            continue;
+        visited[ex]=1;
+        int ucost=d[ex];
+        for(int i=0;i<edges[ex].size();++i){
+            v.second=edges[ex][i],v.first=cost[ex][i]+ucost;
+            if(d[v.second]>v.first){
+                d[v.second]=v.first;
+                parent[v.second]=ex;
+                q.push(v);
+            }
+        }
+    }
+    return d[destination];
+}
+int main()
+{
+    int x,y,z,node,ed,src,dest;
+    cout<<"Number of nodes & edges:"<<endl;
+    cin>>node>>ed;
+    for(int i=0;i<ed;i++)
+    {
+        cout<<"Two nodes & their distance for edge no "<<i+1<<" :"<<endl;
+        cin>>x>>y>>z;
+        edges[x].pb(y);
+        cost[x].pb(z);
+        ///Here the edges are one directional
+
+    }
+    cout<<"Source & Destination:"<<endl;
+    cin>>src>>dest;
+    cout<<dijkstra(src,dest)<<endl;
+    printpath(src,dest);
+    return 0;
+}
+
+
