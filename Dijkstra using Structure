@@ -44,8 +44,21 @@ int dijkstra(int source,int destination)
 }
 int main()
 {
-    int x,y;
-    cin>>x>>y;
-    cout<<dijkstra(x,y)<<endl;
+    int x,y,z,node,ed,src,dest;
+    cout<<"Number of nodes & edges:"<<endl;
+    cin>>node>>ed;
+    for(int i=0;i<ed;i++)
+    {
+        cout<<"Two nodes & their distance for edge no "<<i+1<<":"<<endl;
+        cin>>x>>y>>z;
+        edges[x].pb(y);
+        cost[x].pb(z);
+        ///Here the edges are one directional
+
+    }
+    cout<<"Source & Destination:"<<endl;
+    cin>>src>>dest;
+    cout<<dijkstra(src,dest)<<endl;
     return 0;
 }
+
