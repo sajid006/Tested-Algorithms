@@ -38,7 +38,7 @@ bool bellmanford(int node,int edgeno,int src)
             int x=edges[j].first;
             int y=edges[j].second;
             int z=edges[j].distance;
-            if(d[x]+z<d[y])
+            if(d[x]+z<d[y] && d[x]!=inf)
             {
                 d[y]=d[x]+z;
                 parent[y]=x;
@@ -50,7 +50,7 @@ bool bellmanford(int node,int edgeno,int src)
         int x=edges[j].first;
         int y=edges[j].second;
         int z=edges[j].distance;
-        if(d[x]+z<d[y])
+        if(d[x]+z<d[y] && d[x]!=inf)
         {
 
             return 0;
