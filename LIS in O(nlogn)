@@ -1,0 +1,75 @@
+/*
+input:
+16
+0
+8
+4
+12
+2
+10
+6
+14
+1
+9
+5
+13
+3
+11
+7
+15
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define pb push_back
+ll ara[10004],lis[10004],n;
+ll LIS()
+{
+    ll tail[n]= {0},len=1;
+    tail[0]=ara[0];
+    lis[0]=1;
+    for(ll i=1; i<n; i++)
+    {
+        if(ara[i]<tail[0])
+        {
+            tail[0]=ara[i];
+            lis[i]=1;
+        }
+        else if(ara[i]>tail[len-1])
+        {
+            tail[len++]=ara[i];
+            lis[i]=len;
+        }
+        else
+        {
+            ll pos=upper_bound(tail,tail+len,ara[i])-tail;
+            if(tail[pos-1]!=ara[i]){
+                lis[i]=pos+1;
+                tail[pos]=ara[i];
+            }
+            else
+            {
+                lis[i]=pos;
+            }
+        }
+
+    }
+    return len;
+
+}
+int main()
+{
+    ll i,j;
+    scanf("%lld",&n);
+    for(i=0; i<n; i++)
+    {
+        scanf("%lld",&ara[i]);
+    }
+    printf("%lld\n",LIS());
+    for(i=0; i<n; i++)
+    {
+        printf("%lld : %lld\n",ara[i],lis[i]);
+    }
+    return 0;
+}
