@@ -1,0 +1,60 @@
+///This algo finds Longest Palindromic Subsequence of a string in O(n) time
+///Longest Palindromic Subsequence is the longest subsequence of the string that is a palindrome
+///reference: https://www.youtube.com/watch?v=nbTSfrEfo6M
+
+#include <bits/stdc++.h>
+using namespace std;
+#define pb push_back
+string LPS(string t)
+{
+    int len=t.size();
+    int p[len];
+    memset(p,0,sizeof p);
+    int c=0,r=0,ans=1,center=1;
+    for(int i=1;i<len-1;i++)
+    {
+        int mirr=2*c-i;
+        if(i<r)
+        {
+            p[i]=min(r-i,p[mirr]);
+        }
+
+        while(t[i+(1+p[i])] == t[i-(1+p[i])])
+        {
+            p[i]++;
+        }
+        if(p[i]>ans)
+        {
+            ans=p[i];
+            center=i;
+        }
+        if(i+p[i]>r)
+        {
+            c=i;
+            r=i+p[i];
+        }
+    }
+    int start=center-ans+1;
+    int finish=center+ans-1;
+    string ret;
+    for(int i=start;i<=finish;i+=2)
+    {
+        ret.pb(t[i]);
+    }
+    return ret;
+}
+int main()
+{
+    string s,t;
+    cin>>s;
+    t="$";
+    for(int i=0;i<s.size();i++)
+    {
+        t.pb('#');
+        t.pb(s[i]);
+    }
+    t.pb('#');
+    t.pb('@');
+    cout<<LPS(t)<<endl;
+
+}
