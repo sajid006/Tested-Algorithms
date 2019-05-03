@@ -5,9 +5,10 @@ struct DSU
 	//GLOBAL, IT'S BETTER NOT TO USE CONSTRUCTOR
 	int connected;
 	int par[N], sz[N];
-
+	
 	void init(int n) 
 	{
+		//DON'T FORGET TO CALL THE INIT FUNCTION BY YOURSELF
 		for(int i=1;i<=n;i++)
 		{
 			par[i]=i;
