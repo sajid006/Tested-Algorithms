@@ -1,3 +1,4 @@
+#define N 200005
 struct DSU
 {
 	int connected;
