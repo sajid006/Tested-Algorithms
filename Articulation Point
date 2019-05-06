@@ -12,7 +12,7 @@ input should be:
 
 */
 
-
+//articulation point is a node of a connected graph such thata erasing that will result in the graph being disconnected in two different components
 #include <bits/stdc++.h>
 using namespace std;
 #define pb push_back
