@@ -1,0 +1,5 @@
+#include <bits/stdc++.h>
+#define ll long long
+using namespace std;
+ll ncr[1000][1000];
+//if you want to declare a big array, declare it  globally
