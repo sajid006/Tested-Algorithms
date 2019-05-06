@@ -1,0 +1,79 @@
+/*
+input should be:
+7
+7
+1 2
+4 3
+7 6
+7 3
+4 5
+4 6
+1 3
+
+*/
+
+
+#include <bits/stdc++.h>
+using namespace std;
+#define pb push_back
+#define mx 100005
+bool art[mx],visited[mx];
+int d[mx],low[mx],tim=0,parent[mx],i;
+vector<int>edges[mx];
+void extra()
+{
+    for(int i=1;i<mx;i++){
+        art[i]=false;
+        visited[i]=false;
+        low[i]=0;
+        d[i]=0;
+        parent[i]=i;
+    }
+}
+//art[x]=1 means x is a articulation point,art[x]=0 means it is not
+//dont forget to declare v & child locally
+void FindArticulationPoint(int u)
+{
+
+    tim++;
+    low[u]=d[u]=tim;
+    visited[u]=true;
+    int child=0;//child variable is needed only for checking if the root is articulation point or not
+    for(int i=0;i<edges[u].size();++i){
+        int v=edges[u][i];
+        if(v==parent[u])continue;//this means u is the immediate parent of v
+        if(visited[v]==1){
+            low[u]=min(low[u],d[v]);
+            //one backedge is found
+        }
+        else{
+            parent[v]=u;
+            FindArticulationPoint(v);//dfs
+            if(d[u]<=low[v] && u!=1){
+                art[u]=true;//u is an AP
+            }
+            low[u]=min(low[v],low[u]);
+            child++;
+        }
+        if(child>1 && u==1)art[u]=true;
+    }
+}
+int main()
+{
+    extra();
+    int n,e,x,y;
+    printf("Enter total number of nodes & edges:\n");
+    scanf("%d %d",&n,&e);
+    printf("The edges are:\n");
+    for(int i=0;i<e;++i){
+        scanf("%d %d",&x,&y);
+        edges[x].pb(y);
+        edges[y].pb(x);
+    }
+    FindArticulationPoint(1);
+    //art[x]=1 means x is a articulation point,art[x]=0 means it is not
+    for(int i=1;i<=n;++i){
+        printf("%d: %d\n",i,art[i]);
+    }
+    return 0;
+}
