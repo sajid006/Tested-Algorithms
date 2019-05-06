@@ -1,0 +1,67 @@
+/*
+8 11
+3 4 11
+2 3 18
+1 4 10
+1 2 4
+1 5 2
+4 5 5
+4 7 11
+4 8 9
+6 8 2
+6 7 1
+2 4 8
+*/
+
+
+
+#include <bits/stdc++.h>
+#define pb push_back
+using namespace std;
+bool taken[1000];
+priority_queue<pair<int,int> >pq;
+vector<pair<int,int> >adjlist[1000];
+void process(int vtx)
+{
+    taken[vtx]=1;
+    for(int j=0;j<(int)adjlist[vtx].size();++j){
+        pair<int,int>v=adjlist[vtx][j];
+
+        if(!taken[v.first]){
+            pq.push(pair<int,int>(-v.second,-v.first));
+            //cout<< "    "<<-v.second<<" "<<-v.first<<endl;
+        }
+
+    }
+}
+int main()
+{
+
+    int n,x,y,z;
+    scanf("%d",&n);
+    int e;
+    scanf("%d",&e);
+    for(int i=0;i<e;++i){
+        cin>>x>>y>>z;
+        adjlist[x].pb(pair<int,int>(y,z));
+        adjlist[y].pb(pair<int,int>(x,z));
+    }
+    memset(taken,false,sizeof(taken));
+    process(1);
+    int mst_cost=0,u,w;
+    while(!pq.empty())
+    {
+        pair<int,int>fro=pq.top();
+        pq.pop();
+        u=-fro.second;
+        w=-fro.first;
+        if(!taken[u]){
+            mst_cost+=w;
+            process(u);
+            cout<<u<<" "<<w<<endl;
+        }
+    }
+    printf("mst cost = %d\n",mst_cost);
+    return 0;
+}
+
