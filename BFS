@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define pb push_back
+vector<int> edge[100];
+vector<int> cost[100];
+const int inf=1000000000;
+    //edge[i][j]=jth node connected with i
+    //cost[i][j]=cost of that edge
+int bfs(int source,int destination)
+{
+    int d[100];
+    for(int i=0;i<100;++i)d[i]=inf;
+    queue<int>q;
+    q.push(source);
+    d[source]=0;
+    while(!q.empty()){
+        int u=q.front();
+        q.pop();
+        int ucost=d[u];
+        for(int i=0;i<edge[u].size();++i){
+            int v=edge[u][i],vcost=cost[u][i]+ucost;
+            if(d[v]>vcost){
+                d[v]=vcost;
+                q.push(v);
+            }
+        }
+    }
+    return d[destination];
+}
+int main()
+{
+
+    int n,e,i,x,y,s,d,c;
+    cin>>n>>e;
+    for(i=1;i<=e;++i){
+        cin>>x>>y>>c;
+        edge[x].pb(y);
+        edge[y].pb(x);
+        cost[x].pb(c);
+        cost[y].pb(c);
+    }
+    cin>>s>>d;
+    cout<<bfs(s,d);
+    return 0;
+}
