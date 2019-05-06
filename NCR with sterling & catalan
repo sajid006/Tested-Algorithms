@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+#define ll long long
+using namespace std;
+ll ncr[1000][1000];
+//if you want to declare a big array, declare it  globally
+
+void NCR()
+{
+    ncr[0][0]=1;
+    ll i,j;
+    for(i=1;i<1000;++i){
+        for(j=0;j<=i;++j){
+            if(j==i || j==0) ncr[i][j]=1;
+            else ncr[i][j]=ncr[i-1][j-1]+ ncr[i-1][j];
+        }
+    }
+    for(i=1;i<=10;++i){
+        for(j=0;j<=i;++j){
+            cout<<ncr[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+int main()
+{
+    NCR();
+    return 0;
+}
