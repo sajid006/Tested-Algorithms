@@ -11,71 +11,66 @@ using namespace std;
 #define mod 1000000007
 #define IOS ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 #define pll pair<ll,ll>
+#define mx 200005
+ll ara[mx],BIT[mx],n;
 
-vector<ll>BIT;
-
-ll getNext(ll index)
+void updatepoint(ll index,ll val)
 {
-    return index + (index & -index);
-}
-
-ll getParent(ll index)
-{
-    return index - (index & -index);
-}
-
-void updateBIT(ll val,ll index)
-{
-    while(index < BIT.size())
+    while(index <= n)
     {
         BIT[index]+=val;
-        index=getNext(index);
+        index=index + (index & -index);
     }
+}
+
+void updaterange(ll left,ll right,ll val)
+{
+    updatepoint(left,val);
+    updatepoint(right+1,-val);
 }
 
 ll getSum(ll index)
 {
-    index++;
     ll sum = 0;
     while(index > 0)
     {
         sum+=BIT[index];
-        index=getParent(index);
+        index=index - (index & -index);;
     }
     return sum;
 }
 
-void createtree(vector<ll>input)
+void createtree()
 {
-    ll len=input.size();
-    vector<ll>ex(len+1,0);
-    BIT=ex;
-    for(ll i=1;i<=len;i++)
+    ll i,j;
+    for(i=1;i<=n;i++)
     {
-        updateBIT(input[i-1],i);
+        j= i + (i & -i);
+        if(j<=n)BIT[j]+=BIT[i];
     }
 }
 
 int main()
 {
 
-    ll n,i,j,x;
-    vector<ll>input;
-    cin>>n;
-    for(i=0;i<n;i++)
+    ll i,j,x;
+    scanf("%lld",&n);
+    for(i=1;i<=n;i++)
     {
-        cin>>x;
-        input.pb(x);
+        scanf("%lld",&ara[i]);
+        BIT[i]=ara[i];
     }
-    createtree(input);
-    cout<<"Created"<<endl;
+    createtree();
+    //cout<<"Created"<<endl;
     ll q,a,b;
-    cin>>q;
+    for(i=1;i<=n;i++)printf("%lld\n",BIT[i]);
+    scanf("%lld",&q);
+
     while(q--)
     {
-        cin>>a>>b;
-        if(a==0)cout<<getSum(b)<<endl;
-        else cout<<getSum(b)-getSum(a-1)<<endl;
+        scanf("%lld %lld",&a,&b);
+        if(a==0)printf("%lld\n",getSum(b));
+        else printf("%lld\n",getSum(b)-getSum(a-1));
     }
     return 0;
 }
