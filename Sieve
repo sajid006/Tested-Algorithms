@@ -1,0 +1,25 @@
+void sieve()
+{
+    ll N=1000006;
+    ll sq=sqrt(N+2);
+    for(ll i=3; i<=sq; i+=2)
+    {
+        if(!status[i])
+        {
+            for(ll j=i*i; j<N; j=j+(2*i))
+            {
+                status[j]=1;
+            }
+        }
+    }
+    status[1]=1;
+    for(ll i=4;i<N;i+=2)
+    {
+        status[i]=1;
+    }
+    primes.pb(2);
+    for(i=3;i<N;i+=2)
+    {
+        if(!status[i])primes.pb(i);
+    }
+}
