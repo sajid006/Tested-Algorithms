@@ -19,7 +19,7 @@ void sieve(ll N)
         status[i]=1;
     }
     primes[k++]=2;
-    for(i=3;i<=N;i+=2)
+    for(ll i=3;i<=N;i+=2)
     {
         if(!status[i])primes[k++]=i;
     }
