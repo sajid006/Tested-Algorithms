@@ -1,5 +1,5 @@
 bool status[1000006];
-ll primes[500005],k;
+ll primes[100005],k;
 void sieve(ll N)
 {
     ll sq=sqrt(N+2);
