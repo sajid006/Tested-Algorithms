@@ -1,6 +1,5 @@
-void sieve()
+void sieve(ll N)
 {
-    ll N=1000006;
     ll sq=sqrt(N+2);
     for(ll i=3; i<=sq; i+=2)
     {
