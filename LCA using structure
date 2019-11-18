@@ -1,0 +1,97 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define pb push_back
+#define mx 10004
+#define pll pair<ll,ll>
+#define ff first
+#define ss second
+vector<ll>adj[mx];
+ll n,par[mx],level[mx],P[mx][22];
+void dfs(ll node,ll pr,ll lev)
+{
+    par[node]=pr;
+    level[node]=lev;
+    for(ll i=0; i<adj[node].size(); i++)
+    {
+        ll a=adj[node][i];
+        if(a==pr)
+            continue;
+        dfs(a,node,lev+1);
+    }
+}
+void lca_init()
+{
+    memset(P,-1,sizeof P);
+    ll i,j;
+    for(i=1; i<=n; i++)
+    {
+        P[i][0]=par[i];
+    }
+    for(j=1; (1<<j)<=n; j++)
+    {
+        for(i=1; i<=n; i++)
+        {
+            if(P[i][j-1]!=-1)
+            {
+                P[i][j]=P[P[i][j-1]][j-1];
+            }
+        }
+    }
+}
+ll lca_query(ll p,ll q)
+{
+    ll log=1,i,nxt;
+    if(level[p]<level[q])
+    {
+        swap(p,q);
+    }
+    while(1)
+    {
+        nxt=log+1;
+        if((1<<nxt)>level[p])
+            break;
+        log++;
+    }
+    for(i=log; i>=0; i--)
+    {
+        if(level[p] - (1<<i) >= level[q])
+            p=P[p][i];
+    }
+    if(p==q)
+        return p;
+    for(i=log; i>=0; i--)
+    {
+        if(P[p][i]!=-1 && P[p][i]!=P[q][i])
+        {
+            p=P[p][i];
+            q=P[q][i];
+        }
+    }
+    return par[p];
+}
+
+int main()
+{
+    ll i,j,a,b,c;
+    scanf("%lld",&n);
+    for(i=1; i<n; i++)
+    {
+        scanf("%lld %lld",&a,&b);
+        adj[a].pb(b);
+        adj[b].pb(a);
+
+    }
+    dfs(1,1,0);
+    lca_init();
+
+    ll q;
+    scanf("%lld",&q);
+    while(q--)
+    {
+        scanf("%lld %lld",&a,&b);
+        printf("LCA of %lld and %lld is: %lld\n",a,b,lca_query(a,b));
+    }
+    return 0;
+}
+
