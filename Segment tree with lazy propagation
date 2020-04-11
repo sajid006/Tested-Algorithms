@@ -17,12 +17,14 @@ void creation(ll lo,ll hi,ll pos)
     if(lo==hi)
     {
         tree[pos]=ara[lo];
+        lazy[pos]=0;
         return ;
     }
     ll mid=(lo+hi)/2;
     creation(lo,mid,2*pos);
     creation(mid+1,hi,2*pos+1);
     tree[pos]=tree[2*pos]+tree[2*pos+1];
+    lazy[pos]=0;
 }
 ll query(ll left,ll right,ll lo,ll hi,ll pos)
 {
