@@ -19,7 +19,7 @@ void creation(ll lo,ll hi,ll pos)
         seg[pos]=ara[lo];
         return ;
     }
- 
+
     ll mid=(lo+hi)/2;
     creation(lo,mid,2*pos);
     creation(mid+1,hi,2*pos+1);
@@ -44,9 +44,9 @@ ll binaryquery(ll val,ll lo,ll hi,ll pos)
     }
     return binaryquery(val-seg[2*pos],mid+1,hi,2*pos+1);
 }
-void update(ll lo,ll hi,ll i,ll val,ll pos)
+void update(ll i,ll val,ll lo,ll hi,ll pos)
 {
-    ///call by update(1,n,IndexOfTheArray,ValueToBeReplaced,1);
+    ///call by update(IndexOfTheArray,ValueToBeReplaced,1,n,1);
     if(lo>i || hi<i)
         return ;
     if(lo==i && i==hi)
@@ -55,12 +55,12 @@ void update(ll lo,ll hi,ll i,ll val,ll pos)
         ara[i]=val;
         return ;
     }
- 
- 
+
+
     //there are two if condition above.If we put 2nd one over the first one then it will give wrong answer
     ll mid=(lo+hi)/2;
-    update(lo,mid,i,val,2*pos);
-    update(mid+1,hi,i,val,2*pos+1);
+    update(i,val,lo,mid,2*pos);
+    update(i,val,mid+1,hi,2*pos+1);
     seg[pos]=seg[2*pos]+seg[2*pos+1];
 }
 int main()
@@ -75,26 +75,26 @@ int main()
             scanf("%lld",&ara[i]);
         }
         creation(1,n,1);
-       
+
         printf("Case %lld:\n",tc);
         for(i=1; i<=q; i++)
         {
-           
+
             //cout<<endl;
             //first i didn't comment the endl and got tle!
             scanf("%lld",&x);
- 
+
             if(x==1)
             {
                 scanf("%lld",&k);
                 printf("%lld\n",ara[k+1]);
-                update(1,n,k+1,0,1);
+                update(k+1,0,1,n,1);
             }
             else if(x==2)
             {
                 scanf("%lld %lld",&k,&v);
                 j=k+1;
-                update(1,n,j,ara[j]+v,1);
+                update(j,ara[j]+v,1,n,1);
             }
             else
             {
