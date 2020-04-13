@@ -13,6 +13,7 @@ using namespace std;
 ll ara[100005],seg[400020];
 void creation(ll lo,ll hi,ll pos)
 {
+    ///call by cretion(1,n,1);
     if(lo==hi)
     {
         seg[pos]=ara[lo];
@@ -26,6 +27,7 @@ void creation(ll lo,ll hi,ll pos)
 }
 ll query(ll qlo,ll qhi,ll lo,ll hi,ll pos)
 {
+    ///call by query(queryleft,queryright,1,n,1);
     if(qlo>hi || qhi<lo)return 0;
     if(qlo<=lo && qhi>=hi)return seg[pos];
     ll mid=(lo+hi)/2;
@@ -33,6 +35,7 @@ ll query(ll qlo,ll qhi,ll lo,ll hi,ll pos)
 }
 void update(ll lo,ll hi,ll i,ll val,ll pos)
 {
+    ///call by update(1,n,IndexOfTheArray,ValueToBeReplaced,1);
     if(lo>i || hi<i)
         return ;
     if(lo==i && i==hi)
