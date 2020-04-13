@@ -33,6 +33,17 @@ ll query(ll qlo,ll qhi,ll lo,ll hi,ll pos)
     ll mid=(lo+hi)/2;
     return query(qlo,qhi,lo,mid,2*pos)+query(qlo,qhi,mid+1,hi,2*pos+1);
 }
+ll binaryquery(ll val,ll lo,ll hi,ll pos)
+{
+    ///call by binaryquery(valueToBeSearched,1,n,1);
+    if(lo==hi)return lo;
+    ll mid=(lo+hi)/2;
+    if(seg[2*pos]>=val)
+    {
+        return binaryquery(val,lo,mid,pos*2);
+    }
+    return binaryquery(val-seg[2*pos],mid+1,hi,2*pos+1);
+}
 void update(ll lo,ll hi,ll i,ll val,ll pos)
 {
     ///call by update(1,n,IndexOfTheArray,ValueToBeReplaced,1);
