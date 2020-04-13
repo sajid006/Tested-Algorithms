@@ -1,6 +1,15 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define ll long long
+#define pb push_back
+#define filein freopen("in.txt","r",stdin)
+#define fileout freopen("out.txt","w",stdout)
+#define all(v) v.begin(),v.end()
+#define ff first
+#define ss second
+#define mod 1000000007
+#define mx 200005
+#define IOS ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 ll ara[100005],seg[400020];
 void creation(ll lo,ll hi,ll pos)
 {
