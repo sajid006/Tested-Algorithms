@@ -52,9 +52,9 @@ ll query(ll left,ll right,ll lo,ll hi,ll pos)
     ll mid=(lo+hi)/2;
     return query(left,right,lo,mid,2*pos)+query(left,right,mid+1,hi,2*pos+1);
 }
-void updaterange(ll lo,ll hi,ll left,ll right,ll val,ll pos)
+void updaterange(ll left,ll right,ll val,ll lo,ll hi,ll pos)
 {
-    ///call by updaterange(1,n,left,right,value,1);
+    ///call by updaterange(left,right,value,1,n,1);
     ///val will be added with the existing value,it won't replace the existing one
     if(lazy[pos]!=0)
     {
@@ -78,8 +78,8 @@ void updaterange(ll lo,ll hi,ll left,ll right,ll val,ll pos)
         return;
     }
     ll mid=(lo+hi)/2;
-    updaterange(lo,mid,left,right,val,pos*2);
-    updaterange(mid+1,hi,left,right,val,pos*2+1);
+    updaterange(left,right,val,lo,mid,pos*2);
+    updaterange(left,right,val,mid+1,hi,pos*2+1);
     tree[pos]=tree[pos*2]+tree[pos*2+1];
 }
 
@@ -103,7 +103,7 @@ int main()
         if(c=='u')
         {
             scanf("%lld",&value);
-            updaterange(1,n,left,right,value,1);
+            updaterange(left,right,value,1,n,1);
         }
         else if(c=='q')
         {
