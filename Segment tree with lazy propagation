@@ -9,6 +9,7 @@ using namespace std;
 #define ss second
 #define mod 1000000007
 #define mx 300005
+#define pll pair<ll,ll>
 #define IOS ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 ll ara[mx],lazy[4*mx],tree[4*mx],n;
 void creation(ll lo,ll hi,ll pos)
