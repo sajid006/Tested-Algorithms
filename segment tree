@@ -10,6 +10,7 @@ using namespace std;
 #define mod 1000000007
 #define mx 200005
 #define IOS ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#define pll pair<ll,ll>
 ll ara[100005],seg[400020];
 void creation(ll lo,ll hi,ll pos)
 {
