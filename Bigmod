@@ -1,0 +1,8 @@
+ll Bigmod(ll b, ll p, ll m)
+{
+    if(p==0)
+        return 1%m;
+    if(p%2==0)
+        return (Bigmod(b,p/2,m)*Bigmod(b,p/2,m))%m;
+    return (Bigmod(b,p-1,m)*(b%m))%m;
+}
