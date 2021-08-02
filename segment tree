@@ -12,7 +12,7 @@ using namespace std;
 #define IOS ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 #define pll pair<ll,ll>
 ll ara[100005],seg[400020];
-void creation(ll lo,ll hi,ll pos)
+void creation(int lo,int hi,int pos)
 {
     ///call by cretion(1,n,1);
     if(lo==hi)
@@ -21,31 +21,31 @@ void creation(ll lo,ll hi,ll pos)
         return ;
     }
 
-    ll mid=(lo+hi)/2;
+    int mid=(lo+hi)/2;
     creation(lo,mid,2*pos);
     creation(mid+1,hi,2*pos+1);
     seg[pos]=seg[2*pos]+seg[2*pos+1];
 }
-ll query(ll qlo,ll qhi,ll lo,ll hi,ll pos)
+ll query(int qlo,int qhi,int lo,int hi,int pos)
 {
     ///call by query(queryleft,queryright,1,n,1);
-    if(qlo>hi || qhi<lo || qlo>qhi)return 0;
+    if(qlo>hi || qhi<lo || qlo>qhi)return 0LL;
     if(qlo<=lo && qhi>=hi)return seg[pos];
-    ll mid=(lo+hi)/2;
+    int mid=(lo+hi)/2;
     return query(qlo,qhi,lo,mid,2*pos)+query(qlo,qhi,mid+1,hi,2*pos+1);
 }
-ll binaryquery(ll val,ll lo,ll hi,ll pos)
+int binaryquery(ll val,int lo,int hi,int pos)
 {
     ///call by binaryquery(valueToBeSearched,1,n,1);
     if(lo==hi)return lo;
-    ll mid=(lo+hi)/2;
+    int mid=(lo+hi)/2;
     if(seg[2*pos]>=val)
     {
         return binaryquery(val,lo,mid,pos*2);
     }
     return binaryquery(val-seg[2*pos],mid+1,hi,2*pos+1);
 }
-void update(ll i,ll val,ll lo,ll hi,ll pos)
+void update(int i,ll val,int lo,int hi,int pos)
 {
     ///call by update(IndexOfTheArray,ValueToBeAdded,1,n,1);
     if(lo>i || hi<i)
@@ -59,7 +59,7 @@ void update(ll i,ll val,ll lo,ll hi,ll pos)
 
 
     //there are two if condition above.If we put 2nd one over the first one then it will give wrong answer
-    ll mid=(lo+hi)/2;
+    int mid=(lo+hi)/2;
     update(i,val,lo,mid,2*pos);
     update(i,val,mid+1,hi,2*pos+1);
     seg[pos]=seg[2*pos]+seg[2*pos+1];
