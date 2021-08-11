@@ -1,0 +1,70 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define pb push_back
+#define filein freopen("in.txt","r",stdin)
+#define fileout freopen("out.txt","w",stdout)
+#define all(v) v.begin(),v.end()
+#define ff first
+#define ss second
+#define mod 1000000007
+#define mx 500005
+#define pll pair<ll,ll>
+#define IOS ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+ll ara[mx];
+void prefsuf(string pattern){
+    ara[0]=0;
+    ll i,j,m=pattern.size();
+    for(j=0,i=1;i<m;){
+        if(pattern[i]==pattern[j]){
+            ara[i]=j+1;
+            i++;
+            j++;
+        }
+        else if(j==0){
+            ara[i]=0;
+            i++;
+        }
+        else{
+            j=ara[j-1];
+        }
+    }
+
+}
+ll kmp(string text,string pattern)
+{
+    ll i,j,n=text.size(),m=pattern.size();
+    for(i=0,j=0;i<n;){
+        if(text[i]==pattern[j]){
+            if(j==m-1)return (i-m+1);
+            else {
+                i++;
+                j++;
+            }
+        }
+        else{
+            if(j==0)i++;
+            else{
+                j=ara[j-1];
+            }
+        }
+    }
+    return -1;
+}
+int main()
+{
+    ///Given a text and a pattern, finds out if the pattern is a
+    ///substring of the text or not.Returns the starting position of
+    ///the text where the substring exists or returns -1.Time complexity O(m+n)
+    string text,pattern;
+    cin>>text>>pattern;
+    prefsuf(pattern);
+    ll ans=kmp(text,pattern);
+    cout<<ans<<endl;
+
+    return 0;
+}
+/*
+abxabcabcaby
+abcab
+*/
