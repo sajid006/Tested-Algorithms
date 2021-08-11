@@ -13,6 +13,8 @@ using namespace std;
 #define IOS ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 ll ara[mx];
 void prefsuf(string pattern){
+    ///Contains the length of the largest prefix which is also a suffix of
+    ///the string till the current position
     ara[0]=0;
     ll i,j,m=pattern.size();
     for(j=0,i=1;i<m;){
@@ -33,6 +35,7 @@ void prefsuf(string pattern){
 }
 ll kmp(string text,string pattern)
 {
+    prefsuf(pattern);
     ll i,j,n=text.size(),m=pattern.size();
     for(i=0,j=0;i<n;){
         if(text[i]==pattern[j]){
@@ -58,7 +61,7 @@ int main()
     ///the text where the substring exists or returns -1.Time complexity O(m+n)
     string text,pattern;
     cin>>text>>pattern;
-    prefsuf(pattern);
+    
     ll ans=kmp(text,pattern);
     cout<<ans<<endl;
 
