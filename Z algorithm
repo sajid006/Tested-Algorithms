@@ -1,0 +1,92 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define pb push_back
+#define filein freopen("in.txt","r",stdin)
+#define fileout freopen("out.txt","w",stdout)
+#define all(v) v.begin(),v.end()
+#define ff first
+#define ss second
+#define mod 1000000007
+#define mx 500005
+#define pll pair<ll,ll>
+#define IOS ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+ll Z[mx];
+vector<ll>matchings;
+void calculateZ(string combined){
+    ///Finds the largest substring that starts from
+    ///the current position which is also a prefix of the whole string
+    ll i,j,m=combined.size(),left=0,right=0,k,k1;
+    Z[0]=0;
+    for(k=1;k<m;k++){
+        if(k>right){
+            left=right=k;
+            while(right<m && combined[right]==combined[right-left]){
+                right++;
+            }
+            Z[k]=right-left;
+            right--;
+        }
+        else{
+            k1=k-left;
+            if(Z[k1]<right-k+1){
+                Z[k]=Z[k1];
+            }
+            else{
+                left=k;
+                while(right<m && combined[right]==combined[right-left]){
+                    right++;
+                }
+                Z[k]=right-left;
+                right--;
+            }
+
+        }
+    }
+}
+void matchpattern(string text,string pattern)
+{
+    string combined;
+    ll i,j,a=pattern.size(),b=text.size();
+    for(i=0;i<a;i++)combined.pb(pattern[i]);
+    combined.pb('$');
+    for(i=0;i<b;i++)combined.pb(text[i]);
+    ll c=combined.size();
+    calculateZ(combined);
+    for(i=0;i<c;i++){
+        if(Z[i]==a){
+            matchings.pb(i-a-1);
+        }
+    }
+}
+int main()
+{
+    ///Given a text and a pattern, finds out if the pattern is a
+    ///substring of the text or not.Returns the starting positions of
+    ///the text where the substring exists in a vector
+    ///Time complexity O(m+n)
+    string text,pattern;
+    cin>>text>>pattern;
+    matchpattern(text,pattern);
+    ll i;
+    ll n=text.size()+pattern.size()+1;
+    for(i=0;i<n;i++){
+        cout<<Z[i]<<' ';
+    }
+    cout<<endl;
+    for(i=0;i<matchings.size();i++){
+        cout<<matchings[i]<<' ';
+    }
+    cout<<endl;
+
+
+    return 0;
+}
+/*
+abxabcabcaby
+abcab
+*/
+/*
+xabcabzabc
+abc
+*/
