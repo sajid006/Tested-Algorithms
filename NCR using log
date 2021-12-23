@@ -1,0 +1,16 @@
+ll ncr(ll n,ll r)
+{
+    r=max(r,n-r);
+    double lob=0,hor=0;
+    for(ll i=r+1;i<=n;i++)
+    {
+        lob=lob+log10(i);
+    }
+    for(ll i=1;i<=(n-r);i++)
+    {
+        hor=hor+log10(i);
+    }
+    double ret=pow(10,lob-hor);
+    ll fin=floor(ret+0.5);
+    return fin;
+}
