@@ -1,0 +1,76 @@
+//Lightoj All Possible Increasing Subsequences
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define mx 100005
+#define pb push_back
+#define pll pair<ll,ll>
+#define mod 1000000007
+#define ff first
+#define ss second
+map<ll,ll>mp;
+ll val[mx];
+ll ara[mx];
+ll tree[mx*4];
+ll n;
+void init(ll node, ll b, ll e) {
+    if (b == e) tree[node] = ara[b];
+    else {
+        ll left = node << 1, right = left | 1, mid = (b+e) >> 1;
+        init(left, b, mid);
+        init(right, mid+1, e);
+        tree[node] = tree[left] + tree[right];
+    }
+}
+
+ll query(ll node, ll b, ll e, ll i, ll j) {
+    if (i > j) return 0;
+    if (i == b && j == e) return tree[node];
+    ll left = node << 1, right = left | 1, mid = (b+e) >> 1;
+    return query(left, b, mid, i, min(mid, j)) + query(right, mid+1, e, max(mid+1, i), j);
+}
+
+void update(ll node, ll b, ll e, ll i, ll val) {
+    if (b == e) tree[node] += val;
+    else {
+        ll left = node << 1, right = left | 1, mid = (b+e) >> 1;
+        if (i <= mid) update(left, b, mid, i, val);
+        else update(right, mid+1, e, i, val);
+        tree[node] = tree[left] + tree[right];
+    }
+}
+ll val2[mx];
+int main()
+{
+    ll t;
+    scanf("%lld",&t);
+    for(ll tc=1;tc<=t;tc++)
+    {
+        ll n,i,j;
+        scanf("%lld",&n);
+        mp.clear();
+        for(i=1;i<=n;i++)
+        {
+            scanf("%lld",&val[i]);
+            val2[i]=val[i];
+        }
+        sort(val2+1,val2+n+1);
+        for(i=1;i<=n;i++)
+        {
+            mp[val2[i]]=i;
+        }
+        for(i=1;i<=4*n;i++)tree[i]=0;
+        ll sum=0;
+        for(i=1;i<=n;i++)
+        {
+            ll ind=mp[val[i]];
+            ll cur=query(1,1,n,1,ind-1)+1;
+            cur%=mod;
+            update(1,1,n,ind,cur);
+            sum+=cur;
+            sum%=mod;
+        }
+        printf("Case %lld: %lld\n",tc,sum);
+    }
+    return 0;
+}
