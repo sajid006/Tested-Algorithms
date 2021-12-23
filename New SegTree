@@ -30,6 +30,18 @@ ll query(ll node, ll b, ll e, ll i, ll j) {
     return query(left, b, mid, i, min(mid, j)) + query(right, mid+1, e, max(mid+1, i), j);
 }
 
+ll binaryquery(ll node,ll b, ll e, ll val)
+{
+    //call by binaryquery(1,1,n,valuetobesearched);
+    if(b==e)return e;
+    ll left = node << 1, right = left | 1, mid = (b+e) >> 1;
+    if(tree[left]>=val)
+    {
+        return binaryquery(left, b, mid, val);
+    }
+    return binaryquery(right, mid+1, e, val-tree[left]);
+}
+
 void update(ll node, ll b, ll e, ll i, ll val) {
     if (b == e) tree[node] += val;
     else {
