@@ -1,3 +1,4 @@
+// codeforces 52c
 #include <bits/stdc++.h>
 using namespace std;
 #define ll long long
@@ -11,106 +12,168 @@ using namespace std;
 #define mx 300005
 #define pll pair<ll,ll>
 #define IOS ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
-ll ara[mx],lazy[4*mx],tree[4*mx],n;
-void creation(ll lo,ll hi,ll pos)
+struct info
 {
-    ///call by creation(1,n,1);
-    if(lo==hi)
+    ll sum,prop;
+};
+
+info tree[4*mx];
+ll ara[mx],n;
+void init(ll node, ll b, ll e) {
+	if (b == e) {
+		tree[node].sum = ara[b];
+		tree[node].prop = 0;
+		return;
+	}
+	ll left = node << 1;
+	ll right = (node << 1) + 1;
+	ll mid = (b + e) >> 1;
+	init(left, b, mid);
+	init(right, mid + 1, e);
+	tree[node].sum = min(tree[left].sum , tree[right].sum);
+}
+
+
+void pushdown(ll node, ll b, ll e)
+{
+    if(tree[node].prop && b!=e)
     {
-        tree[pos]=ara[lo];
-        lazy[pos]=0;
+        ll Left=node<<1;
+
+        ll Right=Left+1;
+
+        tree[Left].prop+=tree[node].prop;
+
+        tree[Right].prop+=tree[node].prop;
+
+        tree[Left].sum+=tree[node].prop;
+
+        tree[Right].sum+=tree[node].prop;
+    }
+
+    tree[node].prop=0;
+}
+
+void update(ll node, ll b, ll e, ll i, ll j, ll val)
+{
+    pushdown(node, b, e);
+
+    if(i>e || j<b)
+    {
         return ;
     }
-    ll mid=(lo+hi)/2;
-    creation(lo,mid,2*pos);
-    creation(mid+1,hi,2*pos+1);
-    tree[pos]=tree[2*pos]+tree[2*pos+1];
-    lazy[pos]=0;
+
+    if(b>=i && e<=j)
+    {
+        tree[node].sum+=val;
+
+        tree[node].prop+=val;
+
+        return ;
+    }
+
+    ll mid=(b+e)>>1;
+
+    ll Left=node<<1;
+
+    ll Right=Left+1;
+
+    update(Left, b, mid, i, j, val);
+
+    update(Right, mid+1, e, i, j, val);
+
+    tree[node].sum=min(tree[Left].sum,tree[Right].sum);
 }
-ll query(ll left,ll right,ll lo,ll hi,ll pos)
+
+ll query(ll node, ll b, ll e, ll i, ll j)
 {
-    ///call by query(left,right,1,n,1);
-    ///first propagate lazy array
-    if(lazy[pos]!=0)
+    pushdown(node, b, e);
+
+    if(i>e || j<b)
     {
-        tree[pos]+=(hi-lo+1)*lazy[pos];
-        if(lo!=hi)
-        {
-            lazy[pos*2]+=lazy[pos];
-            lazy[pos*2+1]+=lazy[pos];
-        }
-        lazy[pos]=0;
+        return 1e18;
     }
-    ///Now get the answer
-    if(left>hi || right<lo)
+
+    if(b>=i && e<=j)
     {
-        return 0;
+        return tree[node].sum;
     }
-    if(left<=lo && right>=hi)
-    {
-        return tree[pos];
-    }
-    ll mid=(lo+hi)/2;
-    return query(left,right,lo,mid,2*pos)+query(left,right,mid+1,hi,2*pos+1);
-}
-void updaterange(ll left,ll right,ll val,ll lo,ll hi,ll pos)
-{
-    ///call by updaterange(left,right,value,1,n,1);
-    ///val will be added with the existing value,it won't replace the existing one
-    if(lazy[pos]!=0)
-    {
-        tree[pos]+=(hi-lo+1)*lazy[pos];
-        if(hi!=lo)
-        {
-            lazy[pos*2]+=lazy[pos];
-            lazy[pos*2+1]+=lazy[pos];
-        }
-        lazy[pos]=0;
-    }
-    if(left>hi || right<lo)return;
-    if(left<=lo && right>=hi)
-    {
-        tree[pos]+=(hi-lo+1)*val;
-        if(hi!=lo)
-        {
-            lazy[pos*2]+=val;
-            lazy[pos*2+1]+=val;
-        }
-        return;
-    }
-    ll mid=(lo+hi)/2;
-    updaterange(left,right,val,lo,mid,pos*2);
-    updaterange(left,right,val,mid+1,hi,pos*2+1);
-    tree[pos]=tree[pos*2]+tree[pos*2+1];
+
+    ll mid=(b+e)>>1;
+
+    ll Left=node<<1;
+
+    ll Right=Left+1;
+
+    ll p1=query(Left, b, mid, i, j);
+
+    ll p2=query(Right, mid+1, e, i, j);
+
+    return min(p1,p2);
+
 }
 
 int main()
 {
-    //filein
-    //IOS
-    ll i,j,q,value,left,right;
-    scanf("%lld %lld",&n,&q);
-    for(i=1;i<=n;i++)
+    //filein;
+    //fileout;
+    IOS
+    ll i,j,q,value,left,right,x;
+    cin>>n;
+    for(i=1; i<=n; i++)
     {
-        scanf("%lld",&ara[i]);
+        cin>>ara[i];
     }
-    creation(1,n,1);
-    //for(i=1;i<=20;i++)cout<<tree[i]<<endl;
-    while(q--)
+    init(1,1,n);
+
+    cin>>q;
+
+
+    for(ll df=1; df<=(q+1); df++)
     {
-        char c;
-        cin>>c;
-        scanf("%lld %lld",&left,&right);
-        if(c=='u')
+        string str;
+
+        getline(cin, str);
+        if(df==1)
+            continue;
+        stringstream ss(str);
+        vector<ll>tmp;
+        while (! ss.eof())
         {
-            scanf("%lld",&value);
-            updaterange(left,right,value,1,n,1);
+            ss >> x;
+            tmp.pb(x);
         }
-        else if(c=='q')
+        //for(i=0;i<tmp.size();i++)cout<<tmp[i]<<endl;
+        if(tmp.size()==2)
         {
-            printf("%lld\n",query(left,right,1,n,1));
+            left=tmp[0]+1,right=tmp[1]+1;
+            if(right>=left)
+            {
+                cout<<query(1,1,n,left,right)<<endl;
+            }
+            else
+            {
+                ll a=query(1,1,n,left,n);
+                ll b=query(1,1,n,1,right);
+                cout<<min(a,b)<<endl;
+            }
+
+        }
+
+        else
+        {
+            left=tmp[0]+1,right=tmp[1]+1,value=tmp[2];
+            if(right>=left)
+            {
+                update(1,1,n,left,right,value);
+            }
+            else
+            {
+                update(1,1,n,left,n,value);
+                update(1,1,n,1,right,value);
+            }
+
         }
     }
     return 0;
 }
-
