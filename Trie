@@ -1,0 +1,91 @@
+///taken from uva 11362
+#include <bits/stdc++.h>
+using namespace std;
+#define pb push_back
+#define filein freopen("in.txt","r",stdin)
+#define fileout freopen("out.txt","w",stdout)
+#define all(v) v.begin(),v.end()
+#define ff first
+#define ss second
+#define mod 1000000007
+#define mx 300005
+#define pll pair<ll,ll>
+#define IOS ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+vector<string>vec;
+
+struct node {
+    bool endmark;
+    node* next[26 + 1];
+    node()
+    {
+        endmark = false;
+        for (int i = 0; i < 26; i++)
+            next[i] = NULL;
+    }
+} * root;
+void insrt(string str)
+{
+    int len=str.size();
+    node* curr = root;
+    for (int i = 0; i < len; i++) {
+        int id = str[i] - '0';
+        if (curr->next[id] == NULL)
+            curr->next[id] = new node();
+        curr = curr->next[id];
+    }
+    curr->endmark = true;
+}
+bool srch(string str)
+{
+    int len=str.size();
+    node* curr = root;
+    for (int i = 0; i < len; i++) {
+        int id = str[i] - 'a';
+        if (curr->next[id] == NULL)
+            return false;
+        curr = curr->next[id];
+    }
+    return curr->endmark;
+}
+void del(node* cur)
+{
+    for (int i = 0; i < 26; i++)
+        if (cur->next[i])
+            del(cur->next[i]);
+
+    delete (cur);
+}
+void refresh()
+{
+    vec.clear();
+}
+
+int main()
+{
+    //filein
+    int tc;
+    scanf("%d",&tc);
+    while(tc--)
+    {
+        refresh();
+        int n,i;
+        string str;
+        scanf("%d",&n);
+        for(i=0;i<n;i++){
+            cin>>str;
+            vec.pb(str);
+        }
+        sort(all(vec));
+        root = new node();
+        for(i=0;i<n;i++){
+            bool f=insrt(vec[i]);
+            if(!f)break;
+        }
+        if(i<n)printf("NO\n");
+        else printf("YES\n");
+        del(root);
+    }
+    return 0;
+}
+
+
