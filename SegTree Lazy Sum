@@ -1,0 +1,124 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define pb push_back
+#define filein freopen("in.txt","r",stdin)
+#define fileout freopen("out.txt","w",stdout)
+#define all(v) v.begin(),v.end()
+#define ff first
+#define ss second
+#define mod 1000000007
+#define mx 300005
+#define IOS ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+ll ara[mx],lazy[4*mx],tree[4*mx],n;
+void creation(ll lo,ll hi,ll pos)
+{
+    ///call by creation(1,n,1);
+    if(lo==hi)
+    {
+        tree[pos]=ara[lo];
+        lazy[pos]=0;
+        return ;
+    }
+    ll mid=(lo+hi)/2;
+    creation(lo,mid,2*pos);
+    creation(mid+1,hi,2*pos+1);
+    tree[pos]=tree[2*pos]+tree[2*pos+1];
+    lazy[pos]=0;
+}
+ll query(ll left,ll right,ll lo,ll hi,ll pos)
+{
+    ///call by query(left,right,1,n,1);
+    ///first propagate lazy array
+    if(lazy[pos]!=0)
+    {
+        tree[pos]+=(hi-lo+1)*lazy[pos];
+        if(lo!=hi)
+        {
+            lazy[pos*2]+=lazy[pos];
+            lazy[pos*2+1]+=lazy[pos];
+        }
+        lazy[pos]=0;
+    }
+    ///Now get the answer
+    if(left>hi || right<lo)
+    {
+        return 0;
+    }
+    if(left<=lo && right>=hi)
+    {
+        return tree[pos];
+    }
+    ll mid=(lo+hi)/2;
+    return query(left,right,lo,mid,2*pos)+query(left,right,mid+1,hi,2*pos+1);
+}
+void updaterange(ll lo,ll hi,ll left,ll right,ll val,ll pos)
+{
+    ///call by updaterange(1,n,left,right,value,1);
+    ///val will be added with the existing value,it won't replace the existing one
+    if(lazy[pos]!=0)
+    {
+        tree[pos]+=(hi-lo+1)*lazy[pos];
+        if(hi!=lo)
+        {
+            lazy[pos*2]+=lazy[pos];
+            lazy[pos*2+1]+=lazy[pos];
+        }
+        lazy[pos]=0;
+    }
+    if(left>hi || right<lo)
+        return;
+    if(left<=lo && right>=hi)
+    {
+        tree[pos]+=(hi-lo+1)*val;
+        if(hi!=lo)
+        {
+            lazy[pos*2]+=val;
+            lazy[pos*2+1]+=val;
+        }
+        return;
+    }
+    ll mid=(lo+hi)/2;
+    updaterange(lo,mid,left,right,val,pos*2);
+    updaterange(mid+1,hi,left,right,val,pos*2+1);
+    tree[pos]=tree[pos*2]+tree[pos*2+1];
+}
+
+int main()
+{
+    //filein
+    //IOS
+    ll i,j,q,value;
+    ll t;
+    scanf("%lld",&t);
+    for(ll tc=1; tc<=t; tc++)
+    {
+        scanf("%lld %lld",&n,&q);
+        for(i=1; i<=4*n; i++)
+        {
+            tree[i]=0;
+            lazy[i]=0;
+        }
+        printf("Case %lld:\n",tc);
+        while(q--)
+        {
+            ll type,left,right;
+            scanf("%lld %lld %lld",&type,&left,&right);
+            if(!type)
+            {
+                scanf("%lld",&value);
+                updaterange(1,n,left+1,right+1,value,1);
+            }
+            else
+            {
+                printf("%lld\n",query(left+1,right+1,1,n,1));
+            }
+        }
+    }
+
+
+
+    return 0;
+}
+
+
