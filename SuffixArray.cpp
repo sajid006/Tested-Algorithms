@@ -35,6 +35,7 @@ void buildSA()
 
 void buildLCP()
 {
+	// Use lcp array from index 0 to N-2
 	for (int i = 0, k = 0; i < N; ++i) if (pos[i] != N - 1)
 	{
 		for (int j = sa[pos[i] + 1]; S[i + k] == S[j + k];)
@@ -42,4 +43,6 @@ void buildLCP()
 		lcp[pos[i]] = k;
 		if (k)--k;
 	}
+	
+	
 }
