@@ -1,0 +1,111 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define mx 1000006
+class HashTable
+{
+public:
+    int len;
+    vector<pair<string,string> >table[50];
+
+    HashTable(int n)
+    {
+        len = n;
+        vector<pair<string,string> > temp;
+        for(int i=0;i<len;i++){
+            table[i]=temp;
+        }
+    }
+
+    int hashFunction(string key)
+    {
+        int total = 0;
+        for(int i=0; i<key.size(); i++)
+        {
+            total+= (key[i]-'a');
+        }
+        return total%len;
+    }
+
+    void setValue(string key, string value)
+    {
+        int index = hashFunction(key);
+        if(table[index].empty())
+        {
+            table[index].push_back({key,value});
+        }
+        else
+        {
+            auto it = find_if(table[index].begin(), table[index].end(), [&key](pair<string,string> x)
+            {
+                return x.first == key;
+            });
+            if(it!=table[index].end())
+            {
+                table[index][it - table[index].begin()] = {key, value};
+            }
+            else
+            {
+                table[index].push_back({key, value});
+            }
+        }
+    }
+
+    string getValue(string key)
+    {
+        int index = hashFunction(key);
+        if(!table[index].empty())
+        {
+            auto it = find_if(table[index].begin(), table[index].end(), [&key](pair<string,string> x)
+            {
+                return x.first == key;
+            });
+            if(it!=table[index].end())
+            {
+                return table[index][it - table[index].begin()].second;
+            }
+        }
+        return "";
+    }
+
+    void removeValue(string key)
+    {
+        int index = hashFunction(key);
+        if(!table[index].empty())
+        {
+            auto it = find_if(table[index].begin(), table[index].end(), [&key](pair<string,string> x)
+            {
+                return x.first == key;
+            });
+            if(it!=table[index].end())
+            {
+                table[index].erase(it);
+            }
+        }
+    }
+
+    void display()
+    {
+        for(int i=0; i<len; i++)
+        {
+            for(int j=0; j<table[i].size(); j++)
+            {
+                cout<<table[i][j].first<<' '<<table[i][j].second<<endl;
+            }
+        }
+    }
+};
+
+int main()
+{
+
+    HashTable hashTable(50);
+    hashTable.setValue("sajid", "hasan");
+    hashTable.setValue("name", "Bruce");
+    hashTable.setValue("mane", "Wayne");
+    cout<<hashTable.getValue("sajid")<<endl;
+    cout<<hashTable.getValue("habijabi")<<endl;
+    hashTable.removeValue("mane");
+    hashTable.removeValue("wrong");
+    hashTable.display();
+    return 0;
+}
